@@ -11,10 +11,12 @@ import UIKit
 class TodoListViewController: UITableViewController {
     
     var itemArray = [Item]()
-    var defaults = UserDefaults.standard
+    let dataFilePath = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask).first?.appendingPathComponent("Items.plist")
 
     override func viewDidLoad() {
         super.viewDidLoad()
+        
+        print(dataFilePath)
         
         let newItem = Item()
         newItem.title = "Nagendra Babu"
@@ -28,10 +30,10 @@ class TodoListViewController: UITableViewController {
         newItem3.title = "Sumanth"
         itemArray.append(newItem3)
         
-        guard let items = defaults.array(forKey: "ToDoListArray") else {
-            return
-        }
-        itemArray = items as! [Item]
+//        guard let items = defaults.array(forKey: "ToDoListArray") else {
+//            return
+//        }
+//        itemArray = items as! [Item]
     }
     
     //MARK - Tableview Datasource Methods
@@ -57,6 +59,8 @@ class TodoListViewController: UITableViewController {
         
         itemArray[indexPath.row].done = !itemArray[indexPath.row].done
         
+        saveItems()
+        
         tableView.reloadData()
         
         tableView.deselectRow(at: indexPath, animated: true)
@@ -71,14 +75,26 @@ class TodoListViewController: UITableViewController {
             let newItem = Item()
             newItem.title = TFValue
             self.itemArray.append(newItem)
-            self.defaults.set(self.itemArray, forKey: "ToDoListArray")
-            self.tableView.reloadData()
+            //self.defaults.set(self.itemArray, forKey: "ToDoListArray")
+            self.saveItems()
         }
         alert.addTextField { (alertTF) in
            inputTF = alertTF
         }
         alert.addAction(action)
         present(alert, animated: true, completion: nil)
+    }
+    
+    func saveItems(){
+        
+        let encoder = PropertyListEncoder()
+        do{
+            let demoData = try encoder.encode(self.itemArray)
+            try demoData.write(to: self.dataFilePath!)
+        }catch{
+            print("Error while encoding")
+        }
+        self.tableView.reloadData()
     }
 }
 
