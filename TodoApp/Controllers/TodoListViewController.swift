@@ -7,16 +7,23 @@
 //
 
 import UIKit
+import CoreData
 
 class TodoListViewController: UITableViewController {
     
     var itemArray = [Item]()
-    let dataFilePath = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask).first?.appendingPathComponent("Items.plist")
+    
+    //Plist file path
+    //let dataFilePath = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask).first?.appendingPathComponent("Items.plist")
+    
+    let coreDataContext = (UIApplication.shared.delegate as! AppDelegate).persistentContainer.viewContext
 
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        print(dataFilePath)
+        print(FileManager.default.urls(for: .documentDirectory, in: .userDomainMask))
+        
+        loadItems()
         
 //        let newItem = Item()
 //        newItem.title = "Nagendra Babu"
@@ -35,7 +42,7 @@ class TodoListViewController: UITableViewController {
 //        }
 //        itemArray = items as! [Item]
         
-        loadItems()
+       
     }
     
     //MARK - Tableview Datasource Methods
@@ -59,7 +66,10 @@ class TodoListViewController: UITableViewController {
     
     override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         
-        itemArray[indexPath.row].done = !itemArray[indexPath.row].done
+        //Delete the data from core data
+        coreDataContext.delete(itemArray[indexPath.row])
+        itemArray.remove(at: indexPath.row)
+        //itemArray[indexPath.row].done = !itemArray[indexPath.row].done
         
         saveItems()
         
@@ -74,8 +84,10 @@ class TodoListViewController: UITableViewController {
         let alert = UIAlertController(title: "Add new todo item", message: "", preferredStyle: .alert)
         let action = UIAlertAction(title: "Add", style: .default) { (action) in
             guard let TFValue = inputTF?.text else {return}
-            let newItem = Item()
+            //save the data into core data
+            let newItem = Item(context: self.coreDataContext)
             newItem.title = TFValue
+            newItem.done = false
             self.itemArray.append(newItem)
             //self.defaults.set(self.itemArray, forKey: "ToDoListArray")
             self.saveItems()
@@ -90,28 +102,45 @@ class TodoListViewController: UITableViewController {
     //Encoding the data in plist Using NSCoder Protocol
     func saveItems(){
         
-        let encoder = PropertyListEncoder()
         do{
-            let demoData = try encoder.encode(self.itemArray)
-            try demoData.write(to: self.dataFilePath!)
+            //Note: Other than read that means for create,update,delete into the core data we need to call save method then only data will be effected into the core data
+            //save the data into core data
+            try coreDataContext.save()
         }catch{
-            print("Error while encoding")
+            print("Error while using core data")
         }
+        
+//        let encoder = PropertyListEncoder()
+//        do{
+//            let demoData = try encoder.encode(self.itemArray)
+//            try demoData.write(to: self.dataFilePath!)
+//        }catch{
+//            print("Error while encoding")
+//        }
+        
         self.tableView.reloadData()
     }
     
     //Decoding the data in plist Using NSCoder Protocol
     
     func loadItems(){
-        
-        if let data = try? Data.init(contentsOf: dataFilePath!){
-            let decoder = PropertyListDecoder()
-            do {
-            itemArray = try decoder.decode([Item].self, from: data)
-            }catch{
-                print("Error while decoding")
-            }
+
+        // fetch the data from core data
+        let request:NSFetchRequest<Item> = Item.fetchRequest()
+        do{
+            itemArray = try coreDataContext.fetch(request)
+        }catch{
+            print("\(error) while fetch the data from core data")
         }
+        
+//        if let data = try? Data.init(contentsOf: dataFilePath!){
+//            let decoder = PropertyListDecoder()
+//            do {
+//            itemArray = try decoder.decode([Item].self, from: data)
+//            }catch{
+//                print("Error while decoding")
+//            }
+//        }
     }
 }
 
