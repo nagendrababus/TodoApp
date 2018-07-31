@@ -18,22 +18,24 @@ class TodoListViewController: UITableViewController {
         
         print(dataFilePath)
         
-        let newItem = Item()
-        newItem.title = "Nagendra Babu"
-        itemArray.append(newItem)
-        
-        let newItem2 = Item()
-        newItem2.title = "CharanTeju"
-        itemArray.append(newItem2)
-        
-        let newItem3 = Item()
-        newItem3.title = "Sumanth"
-        itemArray.append(newItem3)
+//        let newItem = Item()
+//        newItem.title = "Nagendra Babu"
+//        itemArray.append(newItem)
+//
+//        let newItem2 = Item()
+//        newItem2.title = "CharanTeju"
+//        itemArray.append(newItem2)
+//
+//        let newItem3 = Item()
+//        newItem3.title = "Sumanth"
+//        itemArray.append(newItem3)
         
 //        guard let items = defaults.array(forKey: "ToDoListArray") else {
 //            return
 //        }
 //        itemArray = items as! [Item]
+        
+        loadItems()
     }
     
     //MARK - Tableview Datasource Methods
@@ -85,6 +87,7 @@ class TodoListViewController: UITableViewController {
         present(alert, animated: true, completion: nil)
     }
     
+    //Encoding the data in plist Using NSCoder Protocol
     func saveItems(){
         
         let encoder = PropertyListEncoder()
@@ -95,6 +98,20 @@ class TodoListViewController: UITableViewController {
             print("Error while encoding")
         }
         self.tableView.reloadData()
+    }
+    
+    //Decoding the data in plist Using NSCoder Protocol
+    
+    func loadItems(){
+        
+        if let data = try? Data.init(contentsOf: dataFilePath!){
+            let decoder = PropertyListDecoder()
+            do {
+            itemArray = try decoder.decode([Item].self, from: data)
+            }catch{
+                print("Error while decoding")
+            }
+        }
     }
 }
 
