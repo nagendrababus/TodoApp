@@ -13,7 +13,8 @@
 		8A468BD1210AF4CD00E60A46 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 8A468BCF210AF4CD00E60A46 /* Main.storyboard */; };
 		8A468BD3210AF4D100E60A46 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 8A468BD2210AF4D100E60A46 /* Assets.xcassets */; };
 		8A468BD6210AF4D100E60A46 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 8A468BD4210AF4D100E60A46 /* LaunchScreen.storyboard */; };
-		8A8FFA2F21104458005CA4EF /* DataModel.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = 8A8FFA2D21104458005CA4EF /* DataModel.xcdatamodeld */; };
+		8AFD30352111C3F1007A6E9C /* Item.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8AFD30342111C3F1007A6E9C /* Item.swift */; };
+		8AFD30372111C3FE007A6E9C /* Category.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8AFD30362111C3FE007A6E9C /* Category.swift */; };
 		C7992EC80324BE8BE8E5AE8F /* Pods_TodoApp.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 7D193D7612250F141C26F305 /* Pods_TodoApp.framework */; };
 /* End PBXBuildFile section */
 
@@ -28,7 +29,8 @@
 		8A468BD5210AF4D100E60A46 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		8A468BD7210AF4D100E60A46 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		8A675998F060BA70601E025B /* Pods-TodoApp.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-TodoApp.release.xcconfig"; path = "Pods/Target Support Files/Pods-TodoApp/Pods-TodoApp.release.xcconfig"; sourceTree = "<group>"; };
-		8A8FFA2E21104458005CA4EF /* DataModel.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = DataModel.xcdatamodel; sourceTree = "<group>"; };
+		8AFD30342111C3F1007A6E9C /* Item.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Item.swift; sourceTree = "<group>"; };
+		8AFD30362111C3FE007A6E9C /* Category.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Category.swift; sourceTree = "<group>"; };
 		AFF3D591FFF611F48B08512A /* Pods-TodoApp.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-TodoApp.debug.xcconfig"; path = "Pods/Target Support Files/Pods-TodoApp/Pods-TodoApp.debug.xcconfig"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -113,7 +115,8 @@
 		8A78F9E7210F0AB0007C0F10 /* Data Model */ = {
 			isa = PBXGroup;
 			children = (
-				8A8FFA2D21104458005CA4EF /* DataModel.xcdatamodeld */,
+				8AFD30362111C3FE007A6E9C /* Category.swift */,
+				8AFD30342111C3F1007A6E9C /* Item.swift */,
 			);
 			path = "Data Model";
 			sourceTree = "<group>";
@@ -248,10 +251,11 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				8AFD30352111C3F1007A6E9C /* Item.swift in Sources */,
 				8A468BCE210AF4CD00E60A46 /* TodoListViewController.swift in Sources */,
-				8A8FFA2F21104458005CA4EF /* DataModel.xcdatamodeld in Sources */,
 				8A468BCC210AF4CD00E60A46 /* AppDelegate.swift in Sources */,
 				8A1E152C21118EA400748B35 /* CategoryTableViewController.swift in Sources */,
+				8AFD30372111C3FE007A6E9C /* Category.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -398,7 +402,10 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_STYLE = Automatic;
 				INFOPLIST_FILE = TodoApp/Info.plist;
-				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+				);
 				PRODUCT_BUNDLE_IDENTIFIER = "Nagendra-Babu.TodoApp";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_VERSION = 4.0;
@@ -413,7 +420,10 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_STYLE = Automatic;
 				INFOPLIST_FILE = TodoApp/Info.plist;
-				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+				);
 				PRODUCT_BUNDLE_IDENTIFIER = "Nagendra-Babu.TodoApp";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_VERSION = 4.0;
@@ -443,19 +453,6 @@
 			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
-
-/* Begin XCVersionGroup section */
-		8A8FFA2D21104458005CA4EF /* DataModel.xcdatamodeld */ = {
-			isa = XCVersionGroup;
-			children = (
-				8A8FFA2E21104458005CA4EF /* DataModel.xcdatamodel */,
-			);
-			currentVersion = 8A8FFA2E21104458005CA4EF /* DataModel.xcdatamodel */;
-			path = DataModel.xcdatamodeld;
-			sourceTree = "<group>";
-			versionGroupType = wrapper.xcdatamodel;
-		};
-/* End XCVersionGroup section */
 	};
 	rootObject = 8A468BC0210AF4CD00E60A46 /* Project object */;
 }
