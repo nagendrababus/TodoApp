@@ -8,8 +8,9 @@
 
 import UIKit
 import RealmSwift
+import ChameleonFramework
 
-class CategoryTableViewController: UITableViewController {
+class CategoryTableViewController: SwipeTableViewController {
     
     let realm = try! Realm()
     
@@ -18,6 +19,7 @@ class CategoryTableViewController: UITableViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
        loadCategories()
+//       tableView.rowHeight = 80.0
     }
     
     //MARK: - Table View Data Source Methods
@@ -27,10 +29,23 @@ class CategoryTableViewController: UITableViewController {
     }
     
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        let cell = tableView.dequeueReusableCell(withIdentifier: "CategoryCell", for: indexPath)
-        cell.textLabel?.text = categoryArray?[indexPath.row].name ?? "No Categories added Yet"
+        let cell = super.tableView(tableView, cellForRowAt: indexPath)
+        
+        if let category = categoryArray?[indexPath.row]{
+            cell.textLabel?.text = category.name
+            
+            guard let categoryColor = UIColor(hexString: category.color) else { fatalError()}
+            
+            cell.backgroundColor = categoryColor
+            cell.textLabel?.textColor = ContrastColorOf(categoryColor, returnFlat: true)
+        }
+        
+        
+        
+        
         return cell
     }
+
     
     //MARK: - Table View Delegate Methods
     
@@ -46,6 +61,8 @@ class CategoryTableViewController: UITableViewController {
         }
     }
     
+    
+    
     //MARK: - Data Manipulation Mathods
     
     @IBAction func addBtnPressed(_ sender: UIBarButtonItem) {
@@ -55,6 +72,7 @@ class CategoryTableViewController: UITableViewController {
         let action = UIAlertAction(title: "Add", style: .default) { (action) in
             let newCategory = Category()
           newCategory.name = inputTF.text!
+          newCategory.color = UIColor.randomFlat.hexValue()
           self.saveCategories(category: newCategory)
         }
         alert.addTextField { (textField) in
@@ -84,5 +102,21 @@ class CategoryTableViewController: UITableViewController {
     func loadCategories(){
         
         categoryArray = realm.objects(Category.self)
+    }
+    
+    //MARK: - Delete data from swipe
+    
+    override func updateDataModel(at indexPath: IndexPath) {
+        
+        if let categoryForDelete = self.categoryArray?[indexPath.row]{
+            do{
+                try self.realm.write {
+                    self.realm.delete(categoryForDelete)
+                }
+            }catch{
+                print("error while deleting the object, \(error)")
+            }
+        }
+//        tableView.reloadData()
     }
 }
